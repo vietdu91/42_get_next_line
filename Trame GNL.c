@@ -6,7 +6,7 @@
 /*   By: Manu <Manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 20:59:46 by Manu              #+#    #+#             */
-/*   Updated: 2021/06/07 23:48:03 by Manu             ###   ########.fr       */
+/*   Updated: 2021/06/08 00:14:19 by Manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	get_next_line (int fd, char **line)
 //		- si line != ft_strdup("")
 //		- si BUFF_SIZE < 1
 //		- si fd < 0 ou fd > 1024
-//		- si read renvoie -1 + penser à free le buff
+//		- si read renvoie -1 + penser à free le buff et le save
+//		- si !save -> save = ft_strdup("");
 
 // Malloc le buff selon BUFF_SIZE
 
@@ -56,3 +57,4 @@ int	get_next_line (int fd, char **line)
 // Si c'est la fin d'une ligne, arrêtez l'exécution. Mais prépare aussi le tampon pour la lecture suivante
 // Aussi, faut gèrer l'absence de saut de ligne
 }
+
