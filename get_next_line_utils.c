@@ -6,11 +6,12 @@
 /*   By: emtran <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/08 11:43:47 by emtran            #+#    #+#             */
-/*   Updated: 2021/06/08 18:09:57 by emtran           ###   ########.fr       */
+/*   Updated: 2021/06/11 17:23:06 by emtran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*ft_strjoin(char *s1, char *s2)
 {
@@ -23,31 +24,14 @@ char	*ft_strjoin(char *s1, char *s2)
 		len_1 = ft_strlen(s1);
 		len_2 = ft_strlen(s2);
 		str = (char *)malloc(sizeof(char) * (len_1 + len_2 + 1));
-		if (str == 0)
+		if (!str)
 			return (0);
 		ft_memcpy(str, s1, len_1);
 		ft_memcpy(str + len_1, s2, len_2 + 1);
+		free(s1);
 		return (str);
 	}
 	return (0);
-}
-
-char	*ft_strdup(char *src)
-{
-	char	*str;
-	int		i;
-
-	str = malloc(sizeof(char) * ft_strlen(src) + 1);
-	if (str == 0)
-		return (0);
-	i = 0;
-	while (src[i])
-	{
-		str[i] = src[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
 }
 
 char	*ft_strnew(size_t size)
@@ -56,7 +40,7 @@ char	*ft_strnew(size_t size)
 
 	str = (char *)malloc(sizeof(char) * size + 1);
 	if (!str)
-		return (NULL);
+		return (0);
 	str[size] = '\0';
 	while (size--)
 		str[size] = '\0';

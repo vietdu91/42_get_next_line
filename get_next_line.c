@@ -6,7 +6,7 @@
 /*   By: emtran <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/04 13:53:24 by emtran            #+#    #+#             */
-/*   Updated: 2021/06/08 20:05:27 by emtran           ###   ########.fr       */
+/*   Updated: 2021/06/11 17:23:04 by emtran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*ft_pushdanstaline(char *save)
 		return (0);
 	while (save[i] && save[i] != '\n')
 		i++;
-	str = ft_strnew(i + 1);
+	str = ft_strnew(i);
 	if (!str)
 		return (0);
 	i = 0;
@@ -86,36 +86,29 @@ static char	*ft_savebryan(char *save)
 
 int	get_next_line(int fd, char **line)
 {
-	char			*buff;
+	char			buff[BUFFER_SIZE + 1];
 	static char		*save;
 	int				ret;
 
 	if (BUFFER_SIZE < 1 || fd < 0 || fd > 1024)
 		return (ft_secu_av_tout(save));
-	buff = ft_strnew(BUFFER_SIZE);
-	if (!buff)
-		return (-1);
-	ret = read(fd, buff, BUFFER_SIZE);
+	ret = 1;
 	while (ft_n_ta_race(save) == 0 && ret != 0)
 	{
-		if (read(fd, buff, BUFFER_SIZE) == -1)
-		{	
-			free(buff);
+		ret = read(fd, buff, BUFFER_SIZE);
+		if (ret == -1)
 			return (ft_secu_av_tout(save));
-		}
 		buff[ret] = '\0';
+//		printf("[%s]\n", buff);
 		save = ft_strjoin(save, buff);
 	}
-	free(buff);
 	*line = ft_pushdanstaline(save);
 	save = ft_savebryan(save);
-	if (!line)
-		return (ft_secu_av_tout(save));
 	if (ret == 0)
 		return (0);
 	return (1);
 }
-
+/*
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -138,4 +131,4 @@ int	main()
       printf("gnl : %d\n", get_next_line(fd, &line));
     printf("main: %s\n", line);
     return (0);
-}
+}*/
