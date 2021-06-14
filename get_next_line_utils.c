@@ -6,18 +6,17 @@
 /*   By: emtran <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/08 11:43:47 by emtran            #+#    #+#             */
-/*   Updated: 2021/06/11 17:23:06 by emtran           ###   ########.fr       */
+/*   Updated: 2021/06/14 14:50:48 by emtran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	int		len_1;
-	int		len_2;
-	char	*str;
+	unsigned int	len_1;
+	unsigned int	len_2;
+	char			*str;
 
 	if (s2 != 0)
 	{
@@ -29,21 +28,27 @@ char	*ft_strjoin(char *s1, char *s2)
 		ft_memcpy(str, s1, len_1);
 		ft_memcpy(str + len_1, s2, len_2 + 1);
 		free(s1);
+		s1 = NULL;
+		str[len_1 + len_2] = '\0';
 		return (str);
 	}
-	return (0);
+	return (s1);
 }
 
-char	*ft_strnew(size_t size)
+char	*ft_strcalloc(size_t size)
 {
 	char	*str;
+	size_t	i;
 
-	str = (char *)malloc(sizeof(char) * size + 1);
+	str = (char *)malloc(sizeof(char) * (size + 1));
 	if (!str)
 		return (0);
-	str[size] = '\0';
-	while (size--)
-		str[size] = '\0';
+	i = 0;
+	while (i < size)
+	{
+		str[i] = 0;
+		i++;
+	}
 	return (str);
 }
 

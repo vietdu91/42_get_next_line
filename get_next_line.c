@@ -6,29 +6,27 @@
 /*   By: emtran <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/04 13:53:24 by emtran            #+#    #+#             */
-/*   Updated: 2021/06/11 17:23:04 by emtran           ###   ########.fr       */
+/*   Updated: 2021/06/14 14:50:35 by emtran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <unistd.h>
-#include <stdio.h>
 
-static char	*ft_pushdanstaline(char *save)
+static char	*ft_pushinyourline(char *save)
 {
 	char	*str;
 	int		i;
-	
+
 	i = 0;
 	if (!save)
 		return (0);
-	while (save[i] && save[i] != '\n')
+	while (save[i] != '\0' && save[i] != '\n')
 		i++;
-	str = ft_strnew(i);
+	str = ft_strcalloc(i);
 	if (!str)
-		return (0);
+		return (NULL);
 	i = 0;
-	while (save[i] && save[i] != '\n')
+	while (save[i] != '\0' && save[i] != '\n')
 	{
 		str[i] = save[i];
 		i++;
@@ -49,7 +47,7 @@ static int	ft_secu_av_tout(char *save)
 
 static int	ft_n_ta_race(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)
@@ -68,19 +66,22 @@ static char	*ft_savebryan(char *save)
 	char	*str;
 	int		i;
 	int		j;
+	int		len;
 
 	i = 0;
 	j = 0;
-	while (save[i] && save[i] != '\n')
+	len = ft_strlen(save);
+	while (save[i] != '\0' && save[i] != '\n')
 		i++;
-	str = ft_strnew(ft_strlen(save) - i + 1);
+	str = ft_strcalloc(len - i + 1);
 	if (!str)
-		return (0);
+		return (NULL);
 	i++;
-	while (save[i])
+	while (i < len)
 		str[j++] = save[i++];
 	str[j] = '\0';
 	free(save);
+	save = NULL;
 	return (str);
 }
 
@@ -90,7 +91,8 @@ int	get_next_line(int fd, char **line)
 	static char		*save;
 	int				ret;
 
-	if (BUFFER_SIZE < 1 || fd < 0 || fd > 1024)
+	if (BUFFER_SIZE < 1 || fd < 0 || fd > 1024
+		|| !line || read(fd, NULL, 0) != 0)
 		return (ft_secu_av_tout(save));
 	ret = 1;
 	while (ft_n_ta_race(save) == 0 && ret != 0)
@@ -99,36 +101,15 @@ int	get_next_line(int fd, char **line)
 		if (ret == -1)
 			return (ft_secu_av_tout(save));
 		buff[ret] = '\0';
-//		printf("[%s]\n", buff);
 		save = ft_strjoin(save, buff);
 	}
-	*line = ft_pushdanstaline(save);
+	*line = ft_pushinyourline(save);
 	save = ft_savebryan(save);
 	if (ret == 0)
+	{
+		free(save);
+		save = 0;
 		return (0);
+	}
 	return (1);
 }
-/*
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-int	main()
-{
-    char            *line;
-    int             fd;
-
-    line = NULL;
-    
-    fd = open("test.txt", O_RDONLY);
-
-    printf("gnl : %d\n", get_next_line(fd, &line));
-    printf("main: %s\n", line);
-    printf("gnl : %d\n", get_next_line(fd, &line));
-    printf("main: %s\n", line);
-     printf("gnl : %d\n", get_next_line(fd, &line));
-    printf("main: %s\n", line);
-      printf("gnl : %d\n", get_next_line(fd, &line));
-    printf("main: %s\n", line);
-    return (0);
-}*/
